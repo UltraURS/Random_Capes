@@ -1,4 +1,4 @@
-package com.example.randomcape;
+package com.example.randomcapes;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -26,7 +26,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * <p>只有客户端就是用得上它的地方，每次启动跑一次；结果写日志即可 —— 换披风要重启
  * 客户端才看得到，所以不需要给玩家做即时提示。
  *
- * <p>怎么挑由配置里的「随机模式」决定，见 {@link RandomCapeConfig.ShuffleMode}。
+ * <p>怎么挑由配置里的「随机模式」决定，见 {@link RandomCapesConfig.ShuffleMode}。
  * 这一层不认识 Fabric 也不认识 NeoForge，触发时机由各自的入口类决定。
  */
 public final class CapeShuffler {
@@ -34,7 +34,7 @@ public final class CapeShuffler {
 	public record Cape(String id, String alias) {
 	}
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RandomCape.MOD_ID);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RandomCapes.MOD_ID);
 
 	private static final URI PROFILE = URI.create("https://api.minecraftservices.com/minecraft/profile");
 	private static final URI ACTIVE_CAPE = URI.create("https://api.minecraftservices.com/minecraft/profile/capes/active");
@@ -71,7 +71,7 @@ public final class CapeShuffler {
 			} catch (Exception e) {
 				LOGGER.warn("Cape shuffle failed: {}", e.toString());
 			}
-		}, RandomCape.MOD_ID + "-shuffle");
+		}, RandomCapes.MOD_ID + "-shuffle");
 		worker.setDaemon(true);
 		worker.start();
 	}
@@ -122,10 +122,10 @@ public final class CapeShuffler {
 		// 列表已经缓存好了（权重界面马上要用）。要不要真换披风是另一回事 ——
 		// 以前这里先看 enabled 再决定拉不拉，结果把「随机披风」关掉之后权重界面
 		// 永远是空的。
-		RandomCapeConfig config = RandomCapeConfig.get();
+		RandomCapesConfig config = RandomCapesConfig.get();
 
 		if (!config.enabled) {
-			LOGGER.info("Cached {} owned cape(s), but random cape is switched off - keeping the current one.",
+			LOGGER.info("Cached {} owned cape(s), but Random Capes is switched off - keeping the current one.",
 					all.size());
 			return;
 		}
@@ -166,11 +166,11 @@ public final class CapeShuffler {
 	 * 挑一个披风。三步：开权重时先剔掉权重 0 的 → 按「随机模式」定出本轮范围
 	 * → 按「抽选跟随权重」决定均匀挑还是按权重挑。
 	 *
-	 * <p>伪随机那一步会更新 {@link RandomCapeConfig#drawnCapes}，
-	 * 所以调用方要负责 {@link RandomCapeConfig#save()}。
+	 * <p>伪随机那一步会更新 {@link RandomCapesConfig#drawnCapes}，
+	 * 所以调用方要负责 {@link RandomCapesConfig#save()}。
 	 */
-	private static Cape pick(List<Cape> candidates, RandomCapeConfig config) {
-		boolean pseudo = config.shuffleMode == RandomCapeConfig.ShuffleMode.PSEUDO_RANDOM;
+	private static Cape pick(List<Cape> candidates, RandomCapesConfig config) {
+		boolean pseudo = config.shuffleMode == RandomCapesConfig.ShuffleMode.PSEUDO_RANDOM;
 		List<Cape> pool = candidates;
 
 		// 开了权重就先剔掉权重 0 的披风。它们既不该被抽到，更不该占伪随机的
@@ -211,7 +211,7 @@ public final class CapeShuffler {
 	 * <p>比较时是拿候选列表去对记录，而不是直接信记录 —— 记录里可能残留账号已经没有的
 	 * 披风 id（比如官方下架了某个披风），拿它直接比会把“本轮”永久卡住。
 	 */
-	private static List<Cape> remainingInRound(List<Cape> candidates, RandomCapeConfig config) {
+	private static List<Cape> remainingInRound(List<Cape> candidates, RandomCapesConfig config) {
 		List<Cape> remaining = candidates.stream()
 				.filter(cape -> !config.drawnCapes.contains(cape.id()))
 				.toList();
@@ -230,7 +230,7 @@ public final class CapeShuffler {
 	 * 按权重抽。调用方已经把 0 权重的剔掉了，所以正常进来时 total 必大于 0；
 	 * 下面那条兜底防的是「所有权重都是 0」那条回退路径。
 	 */
-	private static Cape pickWeighted(List<Cape> pool, RandomCapeConfig config) {
+	private static Cape pickWeighted(List<Cape> pool, RandomCapesConfig config) {
 		double total = 0.0;
 
 		for (Cape cape : pool) {

@@ -1,4 +1,4 @@
-package com.example.randomcape;
+package com.example.randomcapes;
 
 import net.minecraft.client.User;
 
@@ -12,13 +12,13 @@ import java.util.function.Supplier;
  * NeoForge 这版为了少依赖一个事件体系，挂的是 tick 事件（每秒二十次）—— 所以这里
  * 用 {@link AtomicBoolean} 统一挡一道，调用方不必自己管去重。
  */
-public final class RandomCape {
+public final class RandomCapes {
 	/** 模组 id，也是资源命名空间和配置文件名的前缀。 */
-	public static final String MOD_ID = "randomcape";
+	public static final String MOD_ID = "randomcapes";
 
 	private static final AtomicBoolean SHUFFLED = new AtomicBoolean();
 
-	private RandomCape() {
+	private RandomCapes() {
 	}
 
 	/** 客户端可用之后由各加载器调用；重复调用只有第一次会真正生效。 */

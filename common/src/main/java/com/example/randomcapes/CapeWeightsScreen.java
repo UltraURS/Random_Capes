@@ -1,4 +1,4 @@
-package com.example.randomcape;
+package com.example.randomcapes;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
@@ -27,7 +27,7 @@ public class CapeWeightsScreen extends OptionsSubScreen {
 
 	public CapeWeightsScreen(Screen lastScreen) {
 		super(lastScreen, Minecraft.getInstance().options,
-				Component.translatable("randomcape.weights.title"));
+				Component.translatable("randomcapes.weights.title"));
 	}
 
 	@Override
@@ -38,14 +38,14 @@ public class CapeWeightsScreen extends OptionsSubScreen {
 
 		if (capes.isEmpty()) {
 			// 离线账号 / 请求失败 —— 说清楚为什么这里是空的，别让玩家以为界面坏了
-			this.list.addBig(new TextLabel(Component.translatable("randomcape.weights.empty"),
+			this.list.addBig(new TextLabel(Component.translatable("randomcapes.weights.empty"),
 					this.font, 20));
-			this.list.addBig(new TextLabel(Component.translatable("randomcape.weights.empty_hint"),
+			this.list.addBig(new TextLabel(Component.translatable("randomcapes.weights.empty_hint"),
 					this.font, 20));
 			return;
 		}
 
-		RandomCapeConfig config = RandomCapeConfig.get();
+		RandomCapesConfig config = RandomCapesConfig.get();
 
 		for (CapeShuffler.Cape cape : capes) {
 			this.weightOptions.add(weightOption(cape, config));
@@ -70,11 +70,11 @@ public class CapeWeightsScreen extends OptionsSubScreen {
 	@Override
 	protected void addFooter() {
 		Button reset = Button.builder(
-						Component.translatable("randomcape.weights.reset"),
+						Component.translatable("randomcapes.weights.reset"),
 						button -> this.resetWeights())
 				.width(FOOTER_BUTTON_WIDTH)
 				.tooltip(Tooltip.create(
-						Component.translatable("randomcape.weights.reset.tooltip")))
+						Component.translatable("randomcapes.weights.reset.tooltip")))
 				.build();
 
 		// 列表都没读到时没有什么可重置的
@@ -90,17 +90,17 @@ public class CapeWeightsScreen extends OptionsSubScreen {
 	}
 
 	/**
-	 * 全部推回 {@link RandomCapeConfig#DEFAULT_CAPE_WEIGHT}。
+	 * 全部推回 {@link RandomCapesConfig#DEFAULT_CAPE_WEIGHT}。
 	 *
 	 * <p>改完配置必须**重建界面**才看得见：滑条上那行「名字: 0.00」是控件创建时算好的，
 	 * 直接改 {@code OptionInstance} 的值并不会让它重画（实测：值已经是 0.0，界面上仍写着
 	 * 1.00 —— 玩家会以为重置没生效）。重建一次最省事，顺带也让滑条重新对齐到当前配置。
 	 */
 	private void resetWeights() {
-		RandomCapeConfig config = RandomCapeConfig.get();
+		RandomCapesConfig config = RandomCapesConfig.get();
 
 		for (CapeShuffler.Cape cape : CapeShuffler.knownCapes()) {
-			config.capeWeights.put(cape.id(), RandomCapeConfig.DEFAULT_CAPE_WEIGHT);
+			config.capeWeights.put(cape.id(), RandomCapesConfig.DEFAULT_CAPE_WEIGHT);
 		}
 
 		config.save();
@@ -109,7 +109,7 @@ public class CapeWeightsScreen extends OptionsSubScreen {
 	}
 
 	/** 一个披风对应一条滑条。值一改就落盘。 */
-	private static OptionInstance<Double> weightOption(CapeShuffler.Cape cape, RandomCapeConfig config) {
+	private static OptionInstance<Double> weightOption(CapeShuffler.Cape cape, RandomCapesConfig config) {
 		return new OptionInstance<>(
 				// 披风名不是翻译键，TranslatableContents 找不到就会原样显示，正好
 				cape.alias(),
@@ -122,7 +122,7 @@ public class CapeWeightsScreen extends OptionsSubScreen {
 				OptionInstance.UnitDouble.INSTANCE,
 				config.weightOf(cape.id()),
 				value -> {
-					config.capeWeights.put(cape.id(), RandomCapeConfig.clampWeight(value));
+					config.capeWeights.put(cape.id(), RandomCapesConfig.clampWeight(value));
 					config.save();
 				});
 	}

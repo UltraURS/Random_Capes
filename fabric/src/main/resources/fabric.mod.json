@@ -1,21 +1,25 @@
 {
 	"schemaVersion": 1,
-	"id": "randomcape",
+	"id": "randomcapes",
 	"version": "${version}",
-	"name": "Random Cape",
+	"name": "Random Capes",
 	"description": "解决了玩家披风过多选择困难症的问题。",
 	"authors": [
 		"Htqwa_URS"
 	],
 	"license": "CC0-1.0",
-	"icon": "assets/randomcape/icon.png",
+	"icon": "assets/randomcapes/icon.png",
+	"contact": {
+		"homepage": "https://github.com/UltraURS/Random_Capes/tree/26.3",
+		"issues": "https://github.com/UltraURS/Random_Capes/issues"
+	},
 	"environment": "client",
 	"entrypoints": {
 		"client": [
-			"com.example.randomcape.fabric.RandomCapeFabric"
+			"com.example.randomcapes.fabric.RandomCapesFabric"
 		],
 		"modmenu": [
-			"com.example.randomcape.fabric.RandomCapeModMenu"
+			"com.example.randomcapes.fabric.RandomCapesModMenu"
 		]
 	},
 	"depends": {

@@ -1,0 +1,19 @@
+{
+	"randomcapes.config.title": "随机披风",
+	"randomcapes.config.enabled": "随机披风",
+	"randomcapes.config.enabled.tooltip": "每次登录时随机切换披风。",
+	"randomcapes.config.shuffle_mode": "随机模式",
+	"randomcapes.config.weighted": "抽选跟随权重",
+	"randomcapes.config.weighted.tooltip": "开启后会根据玩家设置的权重来抽选披风。",
+	"randomcapes.config.cape_weights": "披风权重…",
+	"randomcapes.config.cape_weights.tooltip": "只在「抽选跟随权重」开启时生效",
+	"randomcapes.shuffle_mode.name.true_random": "真随机",
+	"randomcapes.shuffle_mode.name.pseudo_random": "伪随机",
+	"randomcapes.shuffle_mode.tooltip.true_random": "随机选择一个披风。",
+	"randomcapes.shuffle_mode.tooltip.pseudo_random": "列出玩家拥有的所有的披风，每次进入游戏抽取里面一件。在一轮抽选中，选到的披风会被标记，下次进入游戏时不会选择被标记的披风，直到所有披风被标记，然后才开始新的一轮抽选。",
+	"randomcapes.weights.title": "披风权重",
+	"randomcapes.weights.reset": "重置",
+	"randomcapes.weights.reset.tooltip": "把所有披风的权重恢复为 1",
+	"randomcapes.weights.empty": "还没有读取到披风列表",
+	"randomcapes.weights.empty_hint": "没能读到你的披风。请用正版账号登录，并确认能连上 Mojang 的服务器"
+}

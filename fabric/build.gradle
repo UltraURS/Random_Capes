@@ -11,7 +11,7 @@ repositories {
 	}
 }
 
-// 产物名：randomcape-fabric-<version>.jar（默认只会叫 fabric-<version>.jar，看不出是哪个模组）
+// 产物名：randomcapes-fabric-<version>.jar（默认只会叫 fabric-<version>.jar，看不出是哪个模组）
 base {
 	archivesName = "${mod_id}-${project.name}"
 }

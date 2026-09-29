@@ -1,7 +1,10 @@
-# Random Cape
+# Random Capes
 
 解决了玩家披风过多选择困难症的问题。
 每次登录随机切换披风，支持按权重抽选。
+
+- 仓库主页：https://github.com/UltraURS/Random_Capes/tree/26.3
+- 问题反馈：https://github.com/UltraURS/Random_Capes/issues
 
 ## 抽选规则
 

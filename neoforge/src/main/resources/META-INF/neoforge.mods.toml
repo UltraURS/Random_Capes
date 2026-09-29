@@ -2,25 +2,27 @@
 modLoader="javafml"
 loaderVersion="[1,)"
 license="CC0-1.0"
+issueTrackerURL="https://github.com/UltraURS/Random_Capes/issues"
 
 [[mods]]
-modId="randomcape"
+modId="randomcapes"
 version="${version}"
-displayName="Random Cape"
+displayName="Random Capes"
 authors="Htqwa_URS"
 description='''解决了玩家披风过多选择困难症的问题。'''
 # 方形图标用 iconFile；写 logoFile 会被提示已过时。
-iconFile="assets/randomcape/icon.png"
+iconFile="assets/randomcapes/icon.png"
+displayURL="https://github.com/UltraURS/Random_Capes/tree/26.3"
 displayTest="NONE"
 
-[[dependencies.randomcape]]
+[[dependencies.randomcapes]]
     modId="minecraft"
     type="required"
     versionRange="[26.3,)"
     ordering="NONE"
     side="CLIENT"
 
-[[dependencies.randomcape]]
+[[dependencies.randomcapes]]
     modId="neoforge"
     type="required"
     versionRange="[26.3,)"
