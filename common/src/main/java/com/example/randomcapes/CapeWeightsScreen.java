@@ -38,10 +38,8 @@ public class CapeWeightsScreen extends OptionsSubScreen {
 
 		if (capes.isEmpty()) {
 			// 离线账号 / 请求失败 —— 说清楚为什么这里是空的，别让玩家以为界面坏了
-			this.list.addBig(new TextLabel(Component.translatable("randomcapes.weights.empty"),
-					this.font, 20));
-			this.list.addBig(new TextLabel(Component.translatable("randomcapes.weights.empty_hint"),
-					this.font, 20));
+			this.list.addHeader(Component.translatable("randomcapes.weights.empty"));
+			this.list.addHeader(Component.translatable("randomcapes.weights.empty_hint"));
 			return;
 		}
 
