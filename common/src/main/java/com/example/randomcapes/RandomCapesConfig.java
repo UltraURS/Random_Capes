@@ -55,7 +55,7 @@ public final class RandomCapesConfig {
 	private static RandomCapesConfig instance;
 
 	/** 要不要在每次登录时随机切披风。默认开启。 */
-	public boolean enabled = true;
+	public volatile boolean enabled = true;
 
 	/** 披风的随机方式。 */
 	public ShuffleMode shuffleMode = ShuffleMode.PSEUDO_RANDOM;

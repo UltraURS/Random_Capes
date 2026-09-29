@@ -1,38 +1,22 @@
-# Random Capes
+# 随机披风/Random Capes
 
 解决了玩家披风过多选择困难症的问题。
-
-每次登录随机切换披风，支持按权重抽选。Minecraft 26.3。
-
-- 仓库主页：https://github.com/UltraURS/Random_Capes/tree/26.3
-- 问题反馈：https://github.com/UltraURS/Random_Capes/issues
-
-## 目录结构
-
-```
-RandomCapes/26.3/
-├── common/     共享源码：抽选逻辑、配置、两个界面。不认识任何加载器
-├── fabric/     Fabric 版入口 + fabric.mod.json
-└── neoforge/   NeoForge 版入口 + neoforge.mods.toml
-```
-
-构建要求是 JDK 25（`gradle.properties` 里的 `java_version`）。如果默认 JAVA_HOME
-不是 25，把它填到 `gradle.properties` 末尾已经预留的那行：
-
-## 两种加载器各自的入口
-
-| | Fabric | NeoForge |
-|---|---|---|
-| 主类 | `RandomCapesFabric`（`ClientModInitializer`） | `RandomCapesNeoForge`（`@Mod(dist = CLIENT)`） |
-| 触发时机 | `ClientLifecycleEvents.CLIENT_STARTED` | `ClientTickEvent.Post`（内部去重一次） |
-| 配置界面入口 | Mod Menu | `IConfigScreenFactory`（模组列表的 Config 按钮） |
-
-两边都调用同一个 `RandomCapes.shuffleOnce(...)`，所以用了一句
-`AtomicBoolean` 去重 —— NeoForge 挂的是 tick 事件，每秒会触发二十次。
+每次登录随机切换披风，支持按权重抽选。
+支持fabric和neoforge。
 
 ## 抽选规则
 
 - **真随机**：每次从候选里随机挑一个。
-- **伪随机**：一轮之内不重复，全轮完才开新一轮（记在 `drawnCapes` 里）。
+- **伪随机**：一轮之内不重复，全轮完才开新一轮
 - **抽选跟随权重**：按每条披风的权重（0~1）加权抽选。权重为 0 的既不会被抽到，
   也不会占用伪随机的轮次名额。
+
+## 账号与隐私说明
+
+本模组不收集或保存微软账号密码、验证码、浏览器 Cookie、刷新令牌等登录凭据，也不会将游戏会话令牌发送给作者或第三方服务器。
+
+启用时，本模组会在本机读取当前 Minecraft 会话的访问令牌，仅通过 HTTPS 请求 `api.minecraftservices.com`，读取已拥有的披风并修改账号当前使用的披风。访问令牌只用于请求认证，不写入配置或模组日志；请求失败时不记录原始响应正文。
+
+默认启用随机披风。关闭后不读取会话令牌或发起新的披风请求；已经发出的请求无法撤回。若启动时处于关闭状态，重新启用后需重启游戏，才会读取披风列表并执行抽选。
+
+本模组为非官方项目，未获 Microsoft 或 Mojang 官方背书；以上说明描述本模组自身行为，不代表对其他模组或运行环境的安全保证。
