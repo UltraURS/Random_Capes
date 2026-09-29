@@ -10,7 +10,7 @@
 	"license": "CC0-1.0",
 	"icon": "assets/randomcapes/icon.png",
 	"contact": {
-		"homepage": "https://github.com/UltraURS/Random_Capes/tree/26.1",
+		"homepage": "https://github.com/UltraURS/Random_Capes/tree/1.21.11",
 		"issues": "https://github.com/UltraURS/Random_Capes/issues"
 	},
 	"environment": "client",
@@ -24,8 +24,8 @@
 	},
 	"depends": {
 		"fabricloader": ">=0.19.5",
-		"minecraft": "~26.1",
-		"java": ">=25",
+		"minecraft": "1.21.11",
+		"java": ">=21",
 		"fabric-api": "*"
 	},
 	"recommends": {
