@@ -10,21 +10,21 @@ version="${version}"
 displayName="Random Capes"
 authors="Htqwa_URS"
 description='''解决了玩家披风过多选择困难症的问题。'''
-# 方形图标用 iconFile；写 logoFile 会被提示已过时。
-iconFile="assets/randomcapes/icon.png"
-displayURL="https://github.com/UltraURS/Random_Capes/tree/26.3"
+# 此版本的 NeoForge 使用 logoFile 读取模组图标。
+logoFile="assets/randomcapes/icon.png"
+displayURL="https://github.com/UltraURS/Random_Capes/tree/26.2"
 displayTest="NONE"
 
 [[dependencies.randomcapes]]
     modId="minecraft"
     type="required"
-    versionRange="[26.3,)"
+    versionRange="[26.2,26.3)"
     ordering="NONE"
     side="CLIENT"
 
 [[dependencies.randomcapes]]
     modId="neoforge"
     type="required"
-    versionRange="[26.3,)"
+    versionRange="[26.2,26.3)"
     ordering="NONE"
     side="CLIENT"
