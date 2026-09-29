@@ -1,0 +1,28 @@
+# NeoForge 的模组描述文件。写法见 https://docs.neoforged.net/docs/gettingstarted/modfiles
+modLoader="javafml"
+loaderVersion="[1,)"
+license="CC0-1.0"
+
+[[mods]]
+modId="randomcape"
+version="${version}"
+displayName="Random Cape"
+authors="Htqwa_URS"
+description='''解决了玩家披风过多选择困难症的问题。'''
+# 方形图标用 iconFile；写 logoFile 会被提示已过时。
+iconFile="assets/randomcape/icon.png"
+displayTest="NONE"
+
+[[dependencies.randomcape]]
+    modId="minecraft"
+    type="required"
+    versionRange="[26.3,)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.randomcape]]
+    modId="neoforge"
+    type="required"
+    versionRange="[26.3,)"
+    ordering="NONE"
+    side="CLIENT"

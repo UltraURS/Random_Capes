@@ -1,0 +1,97 @@
+plugins {
+	id 'net.neoforged.moddev' version "${moddev_version}"
+	id 'maven-publish'
+}
+
+// 产物名：randomcape-neoforge-<version>.jar
+base {
+	archivesName = "${mod_id}-${project.name}"
+}
+
+// NeoForge 官方仓库 maven.neoforged.net 在国内通常直接被 TCP 重置
+// （表现为 "Got socket exception during request ... Connection reset"），
+// 而且它是唯一的发布源，没有第三方全量同步。
+// neoforged.forgecdn.net 是它自己的 CDN 分流域名、内容一致且可直连。
+//
+// 关键：ModDev 插件会在 apply() 里自己登记一个带 **content 过滤**的官方仓库，
+// 一旦某个 group（net.neoforged.*）被它认领，Gradle 就不会再去问别的仓库了 ——
+// 所以下面这个外卖仓库只是兜底，真正起作用的是后面把插件那个仓库的地址换掉。
+repositories {
+	maven {
+		name = 'NeoForgeCDN'
+		url = 'https://neoforged.forgecdn.net/releases'
+	}
+}
+
+// ModDev 插件会在 apply() 里自己登记两个带 **content 过滤**的官方仓库
+// （"NeoForged Releases" -> maven.neoforged.net/releases，
+//   "Mojang Meta"       -> maven.neoforged.net/mojang-meta，后者独占 minecraft-dependencies）。
+// 一旦某个 group 被它们认领，Gradle 就不会再去问别的仓库了 —— 所以再多塞几个镜像仓库
+// 也没用，必须把这两个仓库本身的地址换掉。
+//
+// 注意只换域名、保留路径：两个仓库的路径不一样，统一指到 /releases/ 会让
+// minecraft-dependencies 找不到（实测 404）。
+gradle.projectsEvaluated {
+	repositories.all { repo ->
+		String url = (repo instanceof MavenArtifactRepository) ? repo.url.toString() : ''
+
+		if (url.startsWith('https://maven.neoforged.net')) {
+			String mirrored = url.replace('https://maven.neoforged.net', 'https://neoforged.forgecdn.net')
+
+			logger.lifecycle("Rewriting repo '${repo.name}': $url -> $mirrored")
+			repo.setUrl(mirrored)
+		}
+	}
+}
+
+// 共享源码：common/ 里的代码不认识任何加载器，Fabric 与 NeoForge 各自把它编译一份。
+sourceSets.main.java.srcDirs += file('../common/src/main/java')
+sourceSets.main.resources.srcDirs += file('../common/src/main/resources')
+
+neoForge {
+	version = neoforge_version
+
+	runs {
+		client {
+			client()
+		}
+	}
+
+	mods {
+		"${mod_id}" {
+			sourceSet sourceSets.main
+		}
+	}
+}
+
+processResources {
+	inputs.property 'version', version
+
+	filesMatching('META-INF/neoforge.mods.toml') {
+		expand 'version': version
+	}
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(java_version)
+	}
+
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.toVersion(java_version)
+	targetCompatibility = JavaVersion.toVersion(java_version)
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = 'UTF-8'
+	it.options.release = java_version as int
+}
+
+publishing {
+	publications {
+		create('mavenJava', MavenPublication) {
+			from components.java
+		}
+	}
+}

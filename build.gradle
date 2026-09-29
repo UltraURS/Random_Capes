@@ -1,0 +1,9 @@
+plugins {
+	id 'base'
+}
+
+// 版本号写在 gradle.properties 里，两个加载器共用同一份。
+allprojects {
+	group = findProperty('group')
+	version = findProperty('version')
+}
