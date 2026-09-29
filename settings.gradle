@@ -30,7 +30,7 @@ pluginManagement {
 	}
 }
 
-rootProject.name = 'randomcape'
+rootProject.name = 'randomcapes'
 
 // common/ 不是 Gradle 项目：它只是一份共享源码，由下面两个加载器各自引进去编译。
 include('fabric')

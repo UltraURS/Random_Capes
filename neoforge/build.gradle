@@ -3,7 +3,7 @@ plugins {
 	id 'maven-publish'
 }
 
-// 产物名：randomcape-neoforge-<version>.jar
+// 产物名：randomcapes-neoforge-<version>.jar
 base {
 	archivesName = "${mod_id}-${project.name}"
 }

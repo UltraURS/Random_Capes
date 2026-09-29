@@ -1,4 +1,4 @@
-package com.example.randomcape;
+package com.example.randomcapes;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,12 +24,12 @@ import java.util.Map;
 /**
  * The whole config surface, stored as JSON.
  *
- * <p>两个加载器共用这一个配置：<em>游戏目录</em>/config/randomcape.json。
+ * <p>两个加载器共用这一个配置：<em>游戏目录</em>/config/randomcapes.json。
  * 直接用 {@link Minecraft#gameDirectory} 而不走各家的 API（Fabric 的
  * {@code FabricLoader.getConfigDir()}、NeoForge 的 {@code FMLPaths.CONFIGDIR}），
  * 是为了让这一层保持中立 —— Fabric 与 NeoForge 的概念存储位置本来就是同一个目录。
  */
-public final class RandomCapeConfig {
+public final class RandomCapesConfig {
 	/** 没单独设过权重的披风按这个算。 */
 	public static final double DEFAULT_CAPE_WEIGHT = 1.0;
 
@@ -41,10 +41,10 @@ public final class RandomCapeConfig {
 		PSEUDO_RANDOM
 	}
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RandomCape.MOD_ID);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RandomCapes.MOD_ID);
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-	private static final String FILE_NAME = RandomCape.MOD_ID + ".json";
+	private static final String FILE_NAME = RandomCapes.MOD_ID + ".json";
 
 	/** 前身模组的配置文件名，只在本配置文件还不存在时读一次。 */
 	private static final String LEGACY_MOD_FILE = "urssauxiliarymod.json";
@@ -52,10 +52,10 @@ public final class RandomCapeConfig {
 	/** 老配置里那个「自定义随机」模式的值，现在拆成了「随机模式 + 抽选跟随权重」。 */
 	private static final String LEGACY_WEIGHTED_MODE = "WEIGHTED_RANDOM";
 
-	private static RandomCapeConfig instance;
+	private static RandomCapesConfig instance;
 
-	/** 要不要在每次登录时随机切披风。 */
-	public boolean enabled = false;
+	/** 要不要在每次登录时随机切披风。默认开启。 */
+	public boolean enabled = true;
 
 	/** 披风的随机方式。 */
 	public ShuffleMode shuffleMode = ShuffleMode.PSEUDO_RANDOM;
@@ -69,7 +69,7 @@ public final class RandomCapeConfig {
 	/** 权重表：披风 id → 权重（0~1）。没记录过的按 {@link #DEFAULT_CAPE_WEIGHT} 算。 */
 	public Map<String, Double> capeWeights = new LinkedHashMap<>();
 
-	public static RandomCapeConfig get() {
+	public static RandomCapesConfig get() {
 		if (instance == null) {
 			instance = read();
 		}
@@ -100,7 +100,7 @@ public final class RandomCapeConfig {
 		return client.gameDirectory.toPath().resolve("config").resolve(FILE_NAME);
 	}
 
-	private static RandomCapeConfig read() {
+	private static RandomCapesConfig read() {
 		Path path = configPath();
 
 		if (!Files.exists(path)) {
@@ -112,17 +112,17 @@ public final class RandomCapeConfig {
 	}
 
 	/** 读一份配置；读不到就给默认值。 */
-	private static RandomCapeConfig loadFrom(Path path) {
+	private static RandomCapesConfig loadFrom(Path path) {
 		try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			// 先按 JSON 读一遍再转对象：旧配置里可能还写着已经删掉的模式值，
 			// 直接 fromJson 会卡在 Enum.valueOf 上抛异常，整份配置就丢了。
 			JsonObject raw = JsonParser.parseReader(reader).getAsJsonObject();
 			migrateLegacyMode(raw);
 
-			RandomCapeConfig loaded = GSON.fromJson(raw, RandomCapeConfig.class);
+			RandomCapesConfig loaded = GSON.fromJson(raw, RandomCapesConfig.class);
 
 			if (loaded == null) {
-				return new RandomCapeConfig();
+				return new RandomCapesConfig();
 			}
 
 			// 配置文件是纯文本，玩家的手改内容不一定守规矩。
@@ -140,7 +140,7 @@ public final class RandomCapeConfig {
 		} catch (Exception e) {
 			LOGGER.warn("Could not read {}, using defaults: {}", path, e.toString());
 
-			return new RandomCapeConfig();
+			return new RandomCapesConfig();
 		}
 	}
 
@@ -148,14 +148,14 @@ public final class RandomCapeConfig {
 	 * 本配置文件还不存在时的入口：先看一眼前身模组的配置在不在，在就把披风相关的
 	 * 四项搬过来；否则老实给默认值。
 	 */
-	private static RandomCapeConfig importLegacyOrNew(Path path) {
+	private static RandomCapesConfig importLegacyOrNew(Path path) {
 		Path legacy = path.resolveSibling(LEGACY_MOD_FILE);
 
 		if (!Files.exists(legacy)) {
-			return new RandomCapeConfig();
+			return new RandomCapesConfig();
 		}
 
-		RandomCapeConfig imported = loadFrom(legacy);
+		RandomCapesConfig imported = loadFrom(legacy);
 
 		LOGGER.info("Imported the cape settings from {} into {}.", LEGACY_MOD_FILE, FILE_NAME);
 
@@ -183,7 +183,7 @@ public final class RandomCapeConfig {
 		saveTo(this, configPath());
 	}
 
-	private static void saveTo(RandomCapeConfig config, Path path) {
+	private static void saveTo(RandomCapesConfig config, Path path) {
 		try {
 			Files.createDirectories(path.getParent());
 

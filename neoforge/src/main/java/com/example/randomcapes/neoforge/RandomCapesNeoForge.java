@@ -1,7 +1,7 @@
-package com.example.randomcape.neoforge;
+package com.example.randomcapes.neoforge;
 
-import com.example.randomcape.RandomCape;
-import com.example.randomcape.RandomCapeConfigScreen;
+import com.example.randomcapes.RandomCapes;
+import com.example.randomcapes.RandomCapesConfigScreen;
 
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -18,15 +18,15 @@ import net.neoforged.neoforge.common.NeoForge;
  * {@link Minecraft#getInstance()}，服务端根本没有这个类），不限定的话在专用服务器上
  * 加载会直接崩。
  */
-@Mod(value = RandomCape.MOD_ID, dist = Dist.CLIENT)
-public final class RandomCapeNeoForge {
-	public RandomCapeNeoForge(ModContainer container) {
+@Mod(value = RandomCapes.MOD_ID, dist = Dist.CLIENT)
+public final class RandomCapesNeoForge {
+	public RandomCapesNeoForge(ModContainer container) {
 		// 模组列表里的「Config」按钮。作用等同于 Fabric 那边的 Mod Menu 入口。
 		//
 		// 必须先有个明确类型再传进去：ModContainer 上同时有
 		// registerExtensionPoint(Class<T>, T) 和 (Class<T>, Supplier<T>) 两个重载，
 		// 直接写 lambda 编译器会判不出来该用哪个（报错是「对 registerExtensionPoint 的引用不明确」）。
-		IConfigScreenFactory factory = (modContainer, parent) -> new RandomCapeConfigScreen(parent);
+		IConfigScreenFactory factory = (modContainer, parent) -> new RandomCapesConfigScreen(parent);
 
 		container.registerExtensionPoint(IConfigScreenFactory.class, factory);
 
@@ -35,9 +35,9 @@ public final class RandomCapeNeoForge {
 
 	/**
 	 * 触发时机挂的是 tick 而不是某个「客户端就绪」事件：这一个 import 就能覆盖所有版本，
-	 * 不必再去猜它这一版到底叫什么。重复调用由 {@link RandomCape#shuffleOnce} 挡掉。
+	 * 不必再去猜它这一版到底叫什么。重复调用由 {@link RandomCapes#shuffleOnce} 挡掉。
 	 */
 	private void onClientTick(ClientTickEvent.Post event) {
-		RandomCape.shuffleOnce(() -> Minecraft.getInstance().getUser());
+		RandomCapes.shuffleOnce(() -> Minecraft.getInstance().getUser());
 	}
 }

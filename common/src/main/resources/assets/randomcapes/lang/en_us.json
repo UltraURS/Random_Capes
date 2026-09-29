@@ -1,0 +1,19 @@
+{
+	"randomcapes.config.title": "Random Capes",
+	"randomcapes.config.enabled": "Random Capes",
+	"randomcapes.config.enabled.tooltip": "Shuffles the cape randomly on every login.",
+	"randomcapes.config.shuffle_mode": "Shuffle mode",
+	"randomcapes.config.weighted": "Weighted draw",
+	"randomcapes.config.weighted.tooltip": "When enabled, capes are drawn according to the weights you set.",
+	"randomcapes.config.cape_weights": "Cape weights…",
+	"randomcapes.config.cape_weights.tooltip": "Only takes effect when weighted draw is on",
+	"randomcapes.shuffle_mode.name.true_random": "True random",
+	"randomcapes.shuffle_mode.name.pseudo_random": "Pseudo random",
+	"randomcapes.shuffle_mode.tooltip.true_random": "Picks one cape at random.",
+	"randomcapes.shuffle_mode.tooltip.pseudo_random": "Lists every cape you own and draws one each launch. Within a round, drawn capes are marked and skipped on the next launch, until every cape has been drawn — then a new round starts.",
+	"randomcapes.weights.title": "Cape weights",
+	"randomcapes.weights.reset": "Reset",
+	"randomcapes.weights.reset.tooltip": "Restore every cape weight to 1",
+	"randomcapes.weights.empty": "No cape list available yet",
+	"randomcapes.weights.empty_hint": "Could not read your capes. Log in with a premium account and make sure Mojang's servers are reachable"
+}

@@ -1,8 +1,11 @@
-# Random Cape
+# Random Capes
 
 解决了玩家披风过多选择困难症的问题。
 
 每次登录随机切换披风，支持按权重抽选。Minecraft 26.3。
+
+- 仓库主页：https://github.com/UltraURS/Random_Capes/tree/26.3
+- 问题反馈：https://github.com/UltraURS/Random_Capes/issues
 
 ## 目录结构
 
@@ -20,11 +23,11 @@ RandomCapes/26.3/
 
 | | Fabric | NeoForge |
 |---|---|---|
-| 主类 | `RandomCapeFabric`（`ClientModInitializer`） | `RandomCapeNeoForge`（`@Mod(dist = CLIENT)`） |
+| 主类 | `RandomCapesFabric`（`ClientModInitializer`） | `RandomCapesNeoForge`（`@Mod(dist = CLIENT)`） |
 | 触发时机 | `ClientLifecycleEvents.CLIENT_STARTED` | `ClientTickEvent.Post`（内部去重一次） |
 | 配置界面入口 | Mod Menu | `IConfigScreenFactory`（模组列表的 Config 按钮） |
 
-两边都调用同一个 `RandomCape.shuffleOnce(...)`，所以用了一句
+两边都调用同一个 `RandomCapes.shuffleOnce(...)`，所以用了一句
 `AtomicBoolean` 去重 —— NeoForge 挂的是 tick 事件，每秒会触发二十次。
 
 ## 抽选规则

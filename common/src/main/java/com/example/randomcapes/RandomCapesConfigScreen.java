@@ -1,4 +1,4 @@
-package com.example.randomcape;
+package com.example.randomcapes;
 
 import com.mojang.serialization.Codec;
 
@@ -23,7 +23,7 @@ import java.util.Locale;
  *
  * <p>选项本身也按双列排（{@code addSmall}），一屏能看全，不用滚。
  */
-public class RandomCapeConfigScreen extends OptionsSubScreen {
+public class RandomCapesConfigScreen extends OptionsSubScreen {
 	/**
 	 * 「随机披风」是总开关。它关着的时候，另外三个披风相关的选项就没有作用对象了，
 	 * 一起置灰 —— 这里留着它们的引用来切换可用状态。
@@ -32,14 +32,14 @@ public class RandomCapeConfigScreen extends OptionsSubScreen {
 	private AbstractWidget weightedButton;
 	private AbstractWidget weightsButton;
 
-	public RandomCapeConfigScreen(Screen lastScreen) {
+	public RandomCapesConfigScreen(Screen lastScreen) {
 		super(lastScreen, Minecraft.getInstance().options,
-				Component.translatable("randomcape.config.title"));
+				Component.translatable("randomcapes.config.title"));
 	}
 
 	@Override
 	protected void addOptions() {
-		RandomCapeConfig config = RandomCapeConfig.get();
+		RandomCapesConfig config = RandomCapesConfig.get();
 
 		// 第一行：随机披风 | 随机模式
 		// 开关得先用 createButton 变成普通控件 —— addSmall 没有「OptionInstance + 别的控件」
@@ -48,21 +48,21 @@ public class RandomCapeConfigScreen extends OptionsSubScreen {
 		this.modeButton = modeOption(config).createButton(this.minecraft.options);
 
 		this.list.addSmall(
-				switchOption("randomcape.config.enabled", config.enabled,
+				switchOption("randomcapes.config.enabled", config.enabled,
 						value -> config.enabled = value, this::refreshCapeControls)
 						.createButton(this.minecraft.options),
 				this.modeButton);
 
 		// 第二行：抽选跟随权重 | 披风权重（点进去调）
 		// 权重开关一动，「披风权重」的可用状态也得跟着刷新。
-		this.weightedButton = switchOption("randomcape.config.weighted", config.weightedEnabled,
+		this.weightedButton = switchOption("randomcapes.config.weighted", config.weightedEnabled,
 						value -> config.weightedEnabled = value, this::refreshCapeControls)
 				.createButton(this.minecraft.options);
 
-		this.weightsButton = Button.builder(Component.translatable("randomcape.config.cape_weights"),
+		this.weightsButton = Button.builder(Component.translatable("randomcapes.config.cape_weights"),
 						button -> this.minecraft.setScreenAndShow(new CapeWeightsScreen(this)))
 				.tooltip(Tooltip.create(
-						Component.translatable("randomcape.config.cape_weights.tooltip")))
+						Component.translatable("randomcapes.config.cape_weights.tooltip")))
 				.build();
 
 		this.list.addSmall(this.weightedButton, this.weightsButton);
@@ -86,7 +86,7 @@ public class RandomCapeConfigScreen extends OptionsSubScreen {
 				initial,
 				value -> {
 					setter.set(value);
-					RandomCapeConfig.get().save();
+					RandomCapesConfig.get().save();
 					afterChange.run();
 				});
 	}
@@ -101,7 +101,7 @@ public class RandomCapeConfigScreen extends OptionsSubScreen {
 	 * </ul>
 	 */
 	private void refreshCapeControls() {
-		RandomCapeConfig config = RandomCapeConfig.get();
+		RandomCapesConfig config = RandomCapesConfig.get();
 		boolean enabled = config.enabled;
 
 		setActive(this.modeButton, enabled);
@@ -116,13 +116,13 @@ public class RandomCapeConfigScreen extends OptionsSubScreen {
 	}
 
 	/** 随机模式。它的说明要跟着当前选中的模式变，所以 tooltip 是按值现算的。 */
-	private static OptionInstance<RandomCapeConfig.ShuffleMode> modeOption(RandomCapeConfig config) {
+	private static OptionInstance<RandomCapesConfig.ShuffleMode> modeOption(RandomCapesConfig config) {
 		return new OptionInstance<>(
-				"randomcape.config.shuffle_mode",
+				"randomcapes.config.shuffle_mode",
 				mode -> Tooltip.create(Component.translatable(modeKey("tooltip", mode))),
 				(caption, mode) -> Component.translatable(modeKey("name", mode)),
-				new OptionInstance.Enum<>(List.of(RandomCapeConfig.ShuffleMode.values()),
-						Codec.STRING.xmap(RandomCapeConfig.ShuffleMode::valueOf, Enum::name)),
+				new OptionInstance.Enum<>(List.of(RandomCapesConfig.ShuffleMode.values()),
+						Codec.STRING.xmap(RandomCapesConfig.ShuffleMode::valueOf, Enum::name)),
 				config.shuffleMode,
 				mode -> {
 					config.shuffleMode = mode;
@@ -130,9 +130,9 @@ public class RandomCapeConfigScreen extends OptionsSubScreen {
 				});
 	}
 
-	/** 拼出形如 {@code randomcape.shuffle_mode.name.pseudo_random} 的翻译键。 */
-	private static String modeKey(String kind, RandomCapeConfig.ShuffleMode mode) {
-		return "randomcape.shuffle_mode." + kind + "." + mode.name().toLowerCase(Locale.ROOT);
+	/** 拼出形如 {@code randomcapes.shuffle_mode.name.pseudo_random} 的翻译键。 */
+	private static String modeKey(String kind, RandomCapesConfig.ShuffleMode mode) {
+		return "randomcapes.shuffle_mode." + kind + "." + mode.name().toLowerCase(Locale.ROOT);
 	}
 
 	/** 开关改了往哪儿写。 */
