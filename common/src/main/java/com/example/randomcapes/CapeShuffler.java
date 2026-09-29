@@ -58,6 +58,10 @@ public final class CapeShuffler {
 	 * the client thread.
 	 */
 	public static void shuffleAsync(User user) {
+		if (!RandomCapesConfig.get().enabled) {
+			return;
+		}
+
 		String token = user.getAccessToken();
 
 		if (token == null || token.isBlank()) {
@@ -69,7 +73,7 @@ public final class CapeShuffler {
 			try {
 				shuffle(token);
 			} catch (Exception e) {
-				LOGGER.warn("Cape shuffle failed: {}", e.toString());
+				LOGGER.warn("Cape shuffle failed ({}).", e.getClass().getSimpleName());
 			}
 		}, RandomCapes.MOD_ID + "-shuffle");
 		worker.setDaemon(true);
@@ -77,6 +81,10 @@ public final class CapeShuffler {
 	}
 
 	private static void shuffle(String token) throws Exception {
+		if (!RandomCapesConfig.get().enabled) {
+			return;
+		}
+
 		HttpResponse<String> profileResponse = HTTP.send(
 				authorized(PROFILE, token).GET().build(),
 				HttpResponse.BodyHandlers.ofString());
@@ -119,9 +127,7 @@ public final class CapeShuffler {
 
 		knownCapes = List.copyOf(all);
 
-		// 列表已经缓存好了（权重界面马上要用）。要不要真换披风是另一回事 ——
-		// 以前这里先看 enabled 再决定拉不拉，结果把「随机披风」关掉之后权重界面
-		// 永远是空的。
+		// 请求期间可能关闭开关；此时不再提交披风切换。
 		RandomCapesConfig config = RandomCapesConfig.get();
 
 		if (!config.enabled) {
@@ -146,12 +152,12 @@ public final class CapeShuffler {
 		// 伪随机的抽选记录得留下来，下次进游戏才接着轮到剩下的
 		config.save();
 
-		HttpResponse<String> setResponse = HTTP.send(
+		HttpResponse<Void> setResponse = HTTP.send(
 				authorized(ACTIVE_CAPE, token)
 						.header("Content-Type", "application/json")
 						.PUT(HttpRequest.BodyPublishers.ofString("{\"capeId\":\"" + picked.id() + "\"}"))
 						.build(),
-				HttpResponse.BodyHandlers.ofString());
+				HttpResponse.BodyHandlers.discarding());
 
 		if (setResponse.statusCode() == 200) {
 			LOGGER.info("Cape shuffled to '{}' [{} mode] (previous: {})",
@@ -159,7 +165,7 @@ public final class CapeShuffler {
 			return;
 		}
 
-		LOGGER.warn("Could not set cape, HTTP {}: {}", setResponse.statusCode(), setResponse.body());
+		LOGGER.warn("Could not set cape, HTTP {}", setResponse.statusCode());
 	}
 
 	/**
